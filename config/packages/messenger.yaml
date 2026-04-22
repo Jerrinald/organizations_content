@@ -1,0 +1,37 @@
+framework:
+    messenger:
+        failure_transport: failed
+
+        transports:
+            # Default : tasks async (emails, notifications, events dispatchés en post-action)
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+
+            # Queue dédiée aux imports bulk (JsonStreamer, volumétrie lourde).
+            # Workers séparés → un import en cours ne bloque pas les notifs critiques.
+            imports:
+                dsn: 'doctrine://default?queue_name=imports'
+                retry_strategy:
+                    max_retries: 3
+                    delay: 2000
+                    multiplier: 2
+
+            failed: 'doctrine://default?queue_name=failed'
+            sync: 'sync://'
+
+        routing:
+            # Routage ajouté au fil des étapes, par exemple :
+            # App\Message\ImportArticlesMessage: imports
+            # App\Message\SendInvitationEmailMessage: async
+
+when@test:
+    framework:
+        messenger:
+            transports:
+                async: 'in-memory://'
+                imports: 'in-memory://'
+                failed: 'in-memory://'
