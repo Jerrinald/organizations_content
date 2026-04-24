@@ -18,7 +18,7 @@ final class MemberRoleTest extends TestCase
     }
 
     /**
-     * @param array{canManageMembers: bool, canPublish: bool, canManageBilling: bool, canView: bool} $expected
+     * @param array{canManageMembers: bool, canPublish: bool, canManageBilling: bool, canView: bool, canEditOrganization: bool, canDeleteArticles: bool, canDeleteOrganization: bool} $expected
      */
     #[DataProvider('permissionsMatrix')]
     public function testPermissionsMatrix(MemberRole $role, array $expected): void
@@ -27,25 +27,28 @@ final class MemberRoleTest extends TestCase
         self::assertSame($expected['canPublish'], $role->canPublish(), 'canPublish');
         self::assertSame($expected['canManageBilling'], $role->canManageBilling(), 'canManageBilling');
         self::assertSame($expected['canView'], $role->canView(), 'canView');
+        self::assertSame($expected['canEditOrganization'], $role->canEditOrganization(), 'canEditOrganization');
+        self::assertSame($expected['canDeleteArticles'], $role->canDeleteArticles(), 'canDeleteArticles');
+        self::assertSame($expected['canDeleteOrganization'], $role->canDeleteOrganization(), 'canDeleteOrganization');
     }
 
     public static function permissionsMatrix(): iterable
     {
         yield 'Owner a tous les droits' => [
             MemberRole::Owner,
-            ['canManageMembers' => true, 'canPublish' => true, 'canManageBilling' => true, 'canView' => true],
+            ['canManageMembers' => true, 'canPublish' => true, 'canManageBilling' => true, 'canView' => true, 'canEditOrganization' => true, 'canDeleteArticles' => true, 'canDeleteOrganization' => true],
         ];
-        yield 'Admin gère members + publie mais pas billing' => [
+        yield 'Admin gère members + publie + édite l\'org mais pas le billing ni la suppression' => [
             MemberRole::Admin,
-            ['canManageMembers' => true, 'canPublish' => true, 'canManageBilling' => false, 'canView' => true],
+            ['canManageMembers' => true, 'canPublish' => true, 'canManageBilling' => false, 'canView' => true, 'canEditOrganization' => true, 'canDeleteArticles' => true, 'canDeleteOrganization' => false],
         ];
         yield 'Editor publie uniquement' => [
             MemberRole::Editor,
-            ['canManageMembers' => false, 'canPublish' => true, 'canManageBilling' => false, 'canView' => true],
+            ['canManageMembers' => false, 'canPublish' => true, 'canManageBilling' => false, 'canView' => true, 'canEditOrganization' => false, 'canDeleteArticles' => false, 'canDeleteOrganization' => false],
         ];
         yield 'Viewer lit seulement' => [
             MemberRole::Viewer,
-            ['canManageMembers' => false, 'canPublish' => false, 'canManageBilling' => false, 'canView' => true],
+            ['canManageMembers' => false, 'canPublish' => false, 'canManageBilling' => false, 'canView' => true, 'canEditOrganization' => false, 'canDeleteArticles' => false, 'canDeleteOrganization' => false],
         ];
     }
 

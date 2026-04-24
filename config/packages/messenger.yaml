@@ -24,9 +24,8 @@ framework:
             sync: 'sync://'
 
         routing:
-            # Routage ajouté au fil des étapes, par exemple :
+            App\Message\SendInvitationEmailMessage: async
             # App\Message\ImportArticlesMessage: imports
-            # App\Message\SendInvitationEmailMessage: async
 
 when@test:
     framework:

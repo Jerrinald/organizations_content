@@ -46,4 +46,25 @@ enum MemberRole: string
     {
         return true;
     }
+
+    public function canEditOrganization(): bool
+    {
+        return match ($this) {
+            self::Owner, self::Admin => true,
+            self::Editor, self::Viewer => false,
+        };
+    }
+
+    public function canDeleteArticles(): bool
+    {
+        return match ($this) {
+            self::Owner, self::Admin => true,
+            self::Editor, self::Viewer => false,
+        };
+    }
+
+    public function canDeleteOrganization(): bool
+    {
+        return $this === self::Owner;
+    }
 }

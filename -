@@ -1,0 +1,156 @@
+PHPUnit Started (PHPUnit 13.1.7 using PHP 8.4.20 (cli) on WINNT)
+Test Runner Configured
+Bootstrap Finished (D:\sites_perso\organizations-content\tests/bootstrap.php)
+Event Facade Sealed
+Test Suite Loaded (7 tests)
+Test Runner Started
+Test Suite Sorted
+Test Runner Execution Started (7 tests)
+Test Suite Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest, 7 tests)
+Test Preparation Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testSubRequestEstIgnoree)
+Mock Object Created (Symfony\Bundle\SecurityBundle\Security)
+Mock Object Created (App\Repository\OrganizationRepository)
+Mock Object Created (App\Repository\MemberRepository)
+Mock Object Created (Doctrine\ORM\EntityManagerInterface)
+Before Test Method Called (App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp)
+Before Test Method Finished:
+- App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp
+Test Prepared (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testSubRequestEstIgnoree)
+Mock Object Created (Symfony\Component\HttpKernel\HttpKernelInterface)
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testSubRequestEstIgnoree)
+No expectations were configured for the mock object for Symfony\Bundle\SecurityBundle\Security. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testSubRequestEstIgnoree)
+No expectations were configured for the mock object for App\Repository\MemberRepository. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testSubRequestEstIgnoree)
+No expectations were configured for the mock object for Symfony\Component\HttpKernel\HttpKernelInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Passed (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testSubRequestEstIgnoree)
+Test Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testSubRequestEstIgnoree)
+Test Preparation Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testHeaderAbsentNeFaitRien)
+Mock Object Created (Symfony\Bundle\SecurityBundle\Security)
+Mock Object Created (App\Repository\OrganizationRepository)
+Mock Object Created (App\Repository\MemberRepository)
+Mock Object Created (Doctrine\ORM\EntityManagerInterface)
+Before Test Method Called (App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp)
+Before Test Method Finished:
+- App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp
+Test Prepared (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testHeaderAbsentNeFaitRien)
+Mock Object Created (Symfony\Component\HttpKernel\HttpKernelInterface)
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testHeaderAbsentNeFaitRien)
+No expectations were configured for the mock object for Symfony\Bundle\SecurityBundle\Security. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testHeaderAbsentNeFaitRien)
+No expectations were configured for the mock object for App\Repository\MemberRepository. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testHeaderAbsentNeFaitRien)
+No expectations were configured for the mock object for Symfony\Component\HttpKernel\HttpKernelInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Passed (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testHeaderAbsentNeFaitRien)
+Test Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testHeaderAbsentNeFaitRien)
+Test Preparation Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+Mock Object Created (Symfony\Bundle\SecurityBundle\Security)
+Mock Object Created (App\Repository\OrganizationRepository)
+Mock Object Created (App\Repository\MemberRepository)
+Mock Object Created (Doctrine\ORM\EntityManagerInterface)
+Before Test Method Called (App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp)
+Before Test Method Finished:
+- App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp
+Test Prepared (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+Mock Object Created (Symfony\Component\HttpKernel\HttpKernelInterface)
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+No expectations were configured for the mock object for Symfony\Bundle\SecurityBundle\Security. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+No expectations were configured for the mock object for App\Repository\MemberRepository. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+No expectations were configured for the mock object for Doctrine\ORM\EntityManagerInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+No expectations were configured for the mock object for Symfony\Component\HttpKernel\HttpKernelInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Passed (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+Test Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserAnonymeNeFaitRien)
+Test Preparation Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+Mock Object Created (Symfony\Bundle\SecurityBundle\Security)
+Mock Object Created (App\Repository\OrganizationRepository)
+Mock Object Created (App\Repository\MemberRepository)
+Mock Object Created (Doctrine\ORM\EntityManagerInterface)
+Before Test Method Called (App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp)
+Before Test Method Finished:
+- App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp
+Test Prepared (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+Mock Object Created (Symfony\Component\HttpKernel\HttpKernelInterface)
+Mock Object Created (Symfony\Component\Security\Core\User\UserInterface)
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+No expectations were configured for the mock object for Symfony\Bundle\SecurityBundle\Security. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+No expectations were configured for the mock object for App\Repository\MemberRepository. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+No expectations were configured for the mock object for Doctrine\ORM\EntityManagerInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+No expectations were configured for the mock object for Symfony\Component\HttpKernel\HttpKernelInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+No expectations were configured for the mock object for Symfony\Component\Security\Core\User\UserInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Passed (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+Test Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUuidInvalideLeve400)
+Test Preparation Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+Mock Object Created (Symfony\Bundle\SecurityBundle\Security)
+Mock Object Created (App\Repository\OrganizationRepository)
+Mock Object Created (App\Repository\MemberRepository)
+Mock Object Created (Doctrine\ORM\EntityManagerInterface)
+Before Test Method Called (App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp)
+Before Test Method Finished:
+- App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp
+Test Prepared (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+Mock Object Created (Symfony\Component\HttpKernel\HttpKernelInterface)
+Mock Object Created (Symfony\Component\Security\Core\User\UserInterface)
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+No expectations were configured for the mock object for Symfony\Bundle\SecurityBundle\Security. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+No expectations were configured for the mock object for App\Repository\OrganizationRepository. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+No expectations were configured for the mock object for Doctrine\ORM\EntityManagerInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+No expectations were configured for the mock object for Symfony\Component\HttpKernel\HttpKernelInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+No expectations were configured for the mock object for Symfony\Component\Security\Core\User\UserInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Passed (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+Test Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testOrganizationInconnueLeve404)
+Test Preparation Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+Mock Object Created (Symfony\Bundle\SecurityBundle\Security)
+Mock Object Created (App\Repository\OrganizationRepository)
+Mock Object Created (App\Repository\MemberRepository)
+Mock Object Created (Doctrine\ORM\EntityManagerInterface)
+Before Test Method Called (App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp)
+Before Test Method Finished:
+- App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp
+Test Prepared (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+Mock Object Created (Symfony\Component\HttpKernel\HttpKernelInterface)
+Mock Object Created (Symfony\Component\Security\Core\User\UserInterface)
+Test Triggered PHPUnit Deprecation (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+Using with*() without expects() is deprecated and will no longer be possible in PHPUnit 14.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+No expectations were configured for the mock object for Symfony\Bundle\SecurityBundle\Security. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+No expectations were configured for the mock object for App\Repository\OrganizationRepository. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+No expectations were configured for the mock object for Symfony\Component\HttpKernel\HttpKernelInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Triggered PHPUnit Notice (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+No expectations were configured for the mock object for Symfony\Component\Security\Core\User\UserInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+Test Passed (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+Test Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testUserNonMembreRecoit404)
+Test Preparation Started (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testMembreResoutContextEtActiveFiltre)
+Mock Object Created (Symfony\Bundle\SecurityBundle\Security)
+Mock Object Created (App\Repository\OrganizationRepository)
+Mock Object Created (App\Repository\MemberRepository)
+Mock Object Created (Doctrine\ORM\EntityManagerInterface)
+Before Test Method Called (App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp)
+Before Test Method Finished:
+- App\Tests\Unit\EventListener\OrganizationContextListenerTest::setUp
+Test Prepared (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testMembreResoutContextEtActiveFiltre)
+Mock Object Created (Symfony\Component\HttpKernel\HttpKernelInterface)
+Mock Object Created (Symfony\Component\Security\Core\User\UserInterface)
+Mock Object Created (App\Entity\Member)
+Test Triggered PHPUnit Deprecation (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testMembreResoutContextEtActiveFiltre)
+Using with*() without expects() is deprecated and will no longer be possible in PHPUnit 14.
+Mock Object Created (Doctrine\ORM\Query\Filter\SQLFilter)
+Test Errored (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testMembreResoutContextEtActiveFiltre)
+Trying to configure method "setParameter" which cannot be configured because it does not exist, has not been specified, is final, or is static
+Test Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest::testMembreResoutContextEtActiveFiltre)
+Test Suite Finished (App\Tests\Unit\EventListener\OrganizationContextListenerTest, 7 tests)
+Test Runner Execution Finished
+Test Runner Finished
+PHPUnit Finished (Shell Exit Code: 2)
