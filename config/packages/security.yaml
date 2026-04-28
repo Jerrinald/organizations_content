@@ -1,4 +1,9 @@
 security:
+    # Masque toutes les erreurs de sécu par défaut (anti-énumération de comptes).
+    # `none` = "Invalid credentials." uniforme, peu importe la cause réelle.
+    # Override en dev plus bas pour debug (cf. `when@dev`).
+    expose_security_errors: !php/enum Symfony\Component\Security\Http\Authentication\ExposeSecurityLevel::None
+
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
@@ -31,6 +36,11 @@ security:
         - { path: ^/api/(register|login|token/refresh), roles: PUBLIC_ACCESS }
         - { path: ^/api/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+
+when@dev:
+    security:
+        # En dev, on expose tout pour debug (user inconnu vs mdp incorrect vs compte verrouillé).
+        expose_security_errors: !php/enum Symfony\Component\Security\Http\Authentication\ExposeSecurityLevel::All
 
 when@test:
     security:

@@ -25,7 +25,8 @@ framework:
 
         routing:
             App\Message\SendInvitationEmailMessage: async
-            # App\Message\ImportArticlesMessage: imports
+            App\Message\SendExpiryEmailMessage: async
+            App\Message\ImportArticlesMessage: imports
 
 when@test:
     framework:

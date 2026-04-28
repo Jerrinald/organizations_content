@@ -23,6 +23,12 @@ class UpdateOrganizationInput
     )]
     public ?string $slug = null;
 
+    /**
+     * @var array<string, mixed>|null
+     */
+    #[Map(if: [self::class, 'isNotNull'])]
+    public ?array $settings = null;
+
     public static function isNotNull(mixed $value): bool
     {
         return $value !== null;

@@ -1,0 +1,76 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: organizations-content API
+            description: |
+                Plateforme de contenu multi-tenant (Symfony 8 + PHP 8.4).
+
+                Authentification JWT (`/api/login` puis header `Authorization: Bearer <token>`).
+
+                **Multi-tenant** : la plupart des endpoints requièrent le header `X-Organization-Id`
+                pour résoudre l'organisation courante (filtre Doctrine SQL appliqué automatiquement).
+            version: 1.0.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+            parameters:
+                OrganizationIdHeader:
+                    name: X-Organization-Id
+                    in: header
+                    required: true
+                    description: UUID de l'organisation courante (résolu par OrganizationContextListener, vérifie le membership et active le filtre Doctrine).
+                    schema:
+                        type: string
+                        format: uuid
+        security:
+            - Bearer: []
+        paths:
+            /api/login:
+                post:
+                    tags: [Auth]
+                    summary: Authentifie un utilisateur et retourne un access + refresh token.
+                    security: []
+                    requestBody:
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    required: [username, password]
+                                    properties:
+                                        username: { type: string, example: alice@example.com }
+                                        password: { type: string, example: password }
+                    responses:
+                        '200':
+                            description: Tokens JWT
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            token: { type: string }
+                                            refresh_token: { type: string }
+                        '401': { description: Identifiants invalides }
+            /api/token/refresh:
+                post:
+                    tags: [Auth]
+                    summary: Échange un refresh token contre un nouveau couple access + refresh.
+                    security: []
+                    requestBody:
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    required: [refresh_token]
+                                    properties:
+                                        refresh_token: { type: string }
+                    responses:
+                        '200': { description: Nouveau couple de tokens }
+                        '401': { description: Refresh token invalide ou expiré }
+    areas:
+        path_patterns:
+            - ^/api(?!/doc$|/doc\.json$)

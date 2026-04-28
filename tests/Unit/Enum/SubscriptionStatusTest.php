@@ -26,6 +26,7 @@ final class SubscriptionStatusTest extends TestCase
     public static function allowedTransitions(): iterable
     {
         yield 'Trialing → Active (paiement initial)' => [SubscriptionStatus::Trialing, SubscriptionStatus::Active];
+        yield 'Trialing → PastDue (trial expiré sans paiement)' => [SubscriptionStatus::Trialing, SubscriptionStatus::PastDue];
         yield 'Trialing → Canceled (trial non converti)' => [SubscriptionStatus::Trialing, SubscriptionStatus::Canceled];
         yield 'Active → PastDue (paiement échoué)' => [SubscriptionStatus::Active, SubscriptionStatus::PastDue];
         yield 'Active → Canceled (annulation manuelle)' => [SubscriptionStatus::Active, SubscriptionStatus::Canceled];
@@ -49,7 +50,6 @@ final class SubscriptionStatusTest extends TestCase
         // Pas de retour aux états antérieurs
         yield 'Active → Trialing interdit (pas de re-trial)' => [SubscriptionStatus::Active, SubscriptionStatus::Trialing];
         yield 'PastDue → Trialing interdit' => [SubscriptionStatus::PastDue, SubscriptionStatus::Trialing];
-        yield 'Trialing → PastDue interdit (pas de paiement avant Active)' => [SubscriptionStatus::Trialing, SubscriptionStatus::PastDue];
 
         // No-op transitions (pas utiles, on évite les reentry)
         yield 'Trialing → Trialing no-op' => [SubscriptionStatus::Trialing, SubscriptionStatus::Trialing];

@@ -32,13 +32,27 @@ class Subscription implements TenantScoped
     private PlanTier $plan = PlanTier::Free;
 
     #[ORM\Column(enumType: SubscriptionStatus::class)]
-    private SubscriptionStatus $status = SubscriptionStatus::Trialing;
+    public SubscriptionStatus $status = SubscriptionStatus::Trialing {
+        set(SubscriptionStatus $next) {
+            if (isset($this->status) && !$this->status->canTransitionTo($next)) {
+                throw new \DomainException(
+                    sprintf('Transition invalide : %s → %s', $this->status->value, $next->value),
+                );
+            }
+            $this->status = $next;
+            if ($next === SubscriptionStatus::Active) {
+                $this->currentPeriodEndsAt = new \DateTimeImmutable(self::PERIOD_DURATION);
+            }
+        }
+    }
 
     #[ORM\Column]
     private \DateTimeImmutable $trialEndsAt;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $currentPeriodEndsAt = null;
+
+    private const PERIOD_DURATION = '+30 days';
 
     public function __construct()
     {
@@ -74,16 +88,9 @@ class Subscription implements TenantScoped
         return $this;
     }
 
-    public function getStatus(): SubscriptionStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(SubscriptionStatus $status): static
-    {
-        $this->status = $status;
-
-        return $this;
+    public bool $isInTrial {
+        get => $this->status === SubscriptionStatus::Trialing
+            && $this->trialEndsAt > new \DateTimeImmutable();
     }
 
     public function getTrialEndsAt(): \DateTimeImmutable

@@ -14,6 +14,7 @@ use App\Repository\MemberRepository;
 use App\Repository\UserRepository;
 use App\Security\Voter\OrganizationVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,6 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/api/organizations/{organizationId}/members')]
+#[OA\Tag(name: 'Members')]
 final class MemberController extends AbstractController
 {
     #[Route('', methods: ['GET'])]

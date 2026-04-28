@@ -23,15 +23,15 @@ enum SubscriptionStatus: string
 
     /**
      * Transitions autorisées :
-     *   Trialing → Active | Canceled
+     *   Trialing → Active | PastDue | Canceled    (PastDue = trial expiré sans paiement, recouvrement possible)
      *   Active   → PastDue | Canceled
-     *   PastDue  → Active  | Canceled    (Active = paiement recouvré, seul retour « arrière » autorisé)
+     *   PastDue  → Active  | Canceled             (Active = paiement recouvré, seul retour « arrière » autorisé)
      *   Canceled → ∅
      */
     public function canTransitionTo(self $next): bool
     {
         return match ($this) {
-            self::Trialing => $next === self::Active || $next === self::Canceled,
+            self::Trialing => $next === self::Active || $next === self::PastDue || $next === self::Canceled,
             self::Active   => $next === self::PastDue || $next === self::Canceled,
             self::PastDue  => $next === self::Active || $next === self::Canceled,
             self::Canceled => false,

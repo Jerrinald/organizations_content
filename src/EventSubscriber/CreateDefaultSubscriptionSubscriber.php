@@ -6,7 +6,6 @@ namespace App\EventSubscriber;
 
 use App\Entity\Subscription;
 use App\Enum\PlanTier;
-use App\Enum\SubscriptionStatus;
 use App\Event\OrganizationCreatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -32,7 +31,6 @@ final class CreateDefaultSubscriptionSubscriber implements EventSubscriberInterf
         $subscription = (new Subscription())
             ->setOrganization($event->organization)
             ->setPlan(PlanTier::Free)
-            ->setStatus(SubscriptionStatus::Trialing)
             ->setTrialEndsAt(new \DateTimeImmutable(self::TRIAL_DURATION));
 
         $this->em->persist($subscription);

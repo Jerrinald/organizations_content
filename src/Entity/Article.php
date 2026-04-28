@@ -8,6 +8,7 @@ use App\Enum\ArticleStatus;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
 
@@ -33,7 +34,14 @@ class Article implements TenantScoped
     private Member $author;
 
     #[ORM\Column(length: 255)]
-    private string $title;
+    public string $title {
+        set(string $value) {
+            $this->title = $value;
+            if (!isset($this->slug) || $this->slug === '') {
+                $this->slug = self::slugify($value);
+            }
+        }
+    }
 
     #[ORM\Column(length: 255)]
     private string $slug;
@@ -42,7 +50,19 @@ class Article implements TenantScoped
     private string $content;
 
     #[ORM\Column(enumType: ArticleStatus::class)]
-    private ArticleStatus $status = ArticleStatus::Draft;
+    public ArticleStatus $status = ArticleStatus::Draft {
+        set(ArticleStatus $next) {
+            if (isset($this->status) && !$this->status->canTransitionTo($next)) {
+                throw new \DomainException(
+                    sprintf('Transition invalide : %s → %s', $this->status->value, $next->value),
+                );
+            }
+            $this->status = $next;
+            if ($next === ArticleStatus::Published && $this->publishedAt === null) {
+                $this->publishedAt = new \DateTimeImmutable();
+            }
+        }
+    }
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $publishedAt = null;
@@ -86,13 +106,6 @@ class Article implements TenantScoped
         return $this->title;
     }
 
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getSlug(): string
     {
         return $this->slug;
@@ -122,13 +135,6 @@ class Article implements TenantScoped
         return $this->status;
     }
 
-    public function setStatus(ArticleStatus $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
     public function getPublishedAt(): ?\DateTimeImmutable
     {
         return $this->publishedAt;
@@ -139,5 +145,10 @@ class Article implements TenantScoped
         $this->publishedAt = $publishedAt;
 
         return $this;
+    }
+
+    private static function slugify(string $title): string
+    {
+        return (new AsciiSlugger())->slug($title)->lower()->toString();
     }
 }

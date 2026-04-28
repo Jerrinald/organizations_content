@@ -14,6 +14,7 @@ use App\Repository\OrganizationRepository;
 use App\Security\Voter\OrganizationVoter;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +25,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 #[Route('/api/organizations')]
+#[OA\Tag(name: 'Organizations')]
 final class OrganizationController extends AbstractController
 {
     #[Route('', methods: ['POST'])]
