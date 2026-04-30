@@ -50,4 +50,13 @@ enum PlanTier: string
             self::Basic, self::Max => true,
         };
     }
+
+    public function monthlyPriceCents(): int
+    {
+        return match ($this) {
+            self::Free => 0,
+            self::Basic => 1900,
+            self::Max => 4900,
+        };
+    }
 }

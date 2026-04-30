@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Facture {{ subscription.id }}</title>
+    <style>
+        body { font-family: 'Helvetica', sans-serif; max-width: 720px; margin: 2rem auto; color: #222; }
+        h1 { border-bottom: 2px solid #222; padding-bottom: .5rem; }
+        .meta { display: flex; justify-content: space-between; margin: 2rem 0; }
+        .meta div { font-size: .9rem; }
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+        th, td { padding: .75rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f5f5f5; }
+        .total { text-align: right; font-size: 1.2rem; font-weight: bold; margin-top: 1rem; }
+        .muted { color: #888; font-size: .85rem; }
+    </style>
+</head>
+<body>
+    <h1>Facture</h1>
+
+    <div class="meta">
+        <div>
+            <strong>Organisation</strong><br>
+            {{ subscription.organization.name }}<br>
+            <span class="muted">{{ subscription.organization.slug }}</span>
+        </div>
+        <div>
+            <strong>Référence</strong><br>
+            {{ subscription.id }}<br>
+            <span class="muted">Émise le {{ "now"|date('Y-m-d') }}</span>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Période</th>
+                <th style="text-align: right;">Montant</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Abonnement {{ subscription.plan.label }}</td>
+                <td>
+                    {{ periodStart|date('Y-m-d') }} — {{ subscription.currentPeriodEndsAt|date('Y-m-d') }}
+                </td>
+                <td style="text-align: right;">
+                    {{ (subscription.plan.monthlyPriceCents / 100)|number_format(2, ',', ' ') }} €
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total : {{ (subscription.plan.monthlyPriceCents / 100)|number_format(2, ',', ' ') }} €
+    </div>
+</body>
+</html>

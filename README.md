@@ -17,6 +17,7 @@ Le projet implémente une plateforme **multi-tenant** où plusieurs organisation
 - **Export streaming** : `GET /api/organizations/{id}/export` retourne une `StreamedJsonResponse` qui yield org → subscription → members → articles par batch de 100, sans jamais charger toute l'org en mémoire.
 - **Subscription lifecycle** : trial 14j → `Active` (paiement) ou `PastDue` (trial expiré, recouvrement possible) ou `Canceled` (final). Transitions validées par property hook + enum.
 - **Commande CLI** `subscriptions:expire-trials --dry-run` : bascule les trials expirés en `PastDue`, dispatch un event qui downgrade le plan + envoie un email async.
+- **Vue subscription + facturation HTML** : `GET /api/subscriptions/{id}` retourne un payload enrichi (montant, prochaine échéance, statut « facturable »), et `GET /api/subscriptions/{id}/invoice` rend une **facture HTML téléchargeable** pour les subs `Active` (422 sinon). Le moteur Twig sous-jacent est déclaré `lazy: true` (PHP 8.4 Lazy Objects natifs) — Twig n'est instancié que sur la route invoice, jamais sur la route show.
 - **Documentation OpenAPI** auto-générée (Swagger UI sur `/api/doc`).
 
 ---
@@ -157,6 +158,38 @@ php bin/console subscriptions:expire-trials --dry-run
 
 Le `--dry-run` est exposé via `#[Option]` (Symfony 8) directement sur le paramètre `bool $dryRun` du `__invoke` — pas de configuration manuelle du Console Input, le nom est dérivé en kebab-case automatiquement.
 
+### Lazy Objects natifs (PHP 8.4)
+
+Démontré sur un cas concret : `InvoicePdfRenderer` (rendu de facture HTML via Twig) est déclaré lazy, et **injecté dans une façade `BillingService`** qui regroupe les méthodes métier autour des subscriptions :
+
+```php
+// src/Service/BillingService.php
+final class BillingService
+{
+    public function __construct(
+        private readonly InvoicePdfRenderer $renderer,  // ← proxy lazy injecté
+    ) {}
+
+    public function isInvoiceable(Subscription $s): bool { /* check status */ }      // ne touche pas le proxy
+    public function currentAmountCents(Subscription $s): int { /* PlanTier */ }      // ne touche pas le proxy
+    public function nextRenewalDate(Subscription $s): ?\DateTimeImmutable { /* */ }  // ne touche pas le proxy
+    public function renderInvoice(Subscription $s): string                            // matérialise
+    {
+        return $this->renderer->render($s);
+    }
+    public function invoiceFilename(Subscription $s): string                          // matérialise
+    {
+        return $this->renderer->filename($s);
+    }
+}
+```
+
+Le `SubscriptionController` expose deux actions qui consomment toutes deux `BillingService`, mais avec un comportement très différent vis-à-vis du moteur Twig :
+
+- `GET /api/subscriptions/{id}` (`show`) → appelle uniquement `currentAmountCents` / `nextRenewalDate` / `isInvoiceable`
+- `GET /api/subscriptions/{id}/invoice` (`invoice`) → appelle `renderInvoice()` → le proxy se matérialise → Twig est instancié → template `invoice/invoice.html.twig` rendu, retourné en HTML attaché (`Content-Disposition: attachment`).
+```
+
 ### Symfony ObjectMapper — DTO ↔ Entity sans boilerplate
 
 Mapping déclaratif via attributs `#[Map]` sur les DTO, avec transformeurs pour les types complexes (dates, UUID, enums) :
@@ -213,7 +246,8 @@ src/
 │   ├── ArticleImportController.php          (POST /import → dispatch async)
 │   ├── MemberController.php                 (invite, list, remove)
 │   ├── OrganizationController.php           (CRUD)
-│   └── OrganizationExportController.php     (StreamedJsonResponse)
+│   ├── OrganizationExportController.php     (StreamedJsonResponse)
+│   └── SubscriptionController.php           (show enrichi + invoice HTML)
 ├── Doctrine/
 │   ├── Filter/OrganizationFilter.php        (SQL Filter — invariant central)
 │   └── TenantScoped.php                     (marker interface)
@@ -235,6 +269,9 @@ src/
 ├── Message/              ImportArticles, SendInvitationEmail, SendExpiryEmail
 ├── MessageHandler/       JsonStreamer batch flush, log + TODO Mailer
 ├── Repository/           Méthodes métier (findByUser, findExpiringTrials, …)
+├── Service/
+│   ├── BillingService.php          (façade — contient le renderer lazy)
+│   └── InvoicePdfRenderer.php      (lazy: true — Twig instancié à la demande)
 └── Security/Voter/       OrganizationVoter (7 attributes), ArticleVoter, SubscriptionVoter
 ```
 
@@ -255,6 +292,8 @@ src/
 | GET / PATCH / DELETE | `/api/articles/{id}` | CRUD | JWT + `X-Organization-Id` + Voter |
 | PATCH | `/api/articles/{id}/status` | Transition (409 si invalide) | JWT + Voter |
 | POST | `/api/articles/import` | Upload + import bulk async | JWT + Voter |
+| GET | `/api/subscriptions/{id}` | Vue enrichie (status, plan, montant, prochaine échéance, isInvoiceable) | JWT + Voter |
+| GET | `/api/subscriptions/{id}/invoice` | Téléchargement HTML de la facture (sub `Active` requise, sinon 422) | JWT + Voter |
 | GET | `/api/doc` | Swagger UI | Public |
 
 **Header `X-Organization-Id` requis** sur tous les endpoints `/api/articles/*` (résolution du tenant via `OrganizationContextListener`, vérif membership, activation du filtre Doctrine).
@@ -299,20 +338,9 @@ php bin/console subscriptions:expire-trials --dry-run
 php bin/console tokens:cleanup
 ```
 
----
-
-## Choix de design notables
-
-- **`OrganizationVoter` via `MemberRepository::findOneBy`** plutôt que de charger toute la collection des members en PHP : requête SQL ciblée, pas de chargement inutile.
-- **Import bulk write-only** : pas de `OrganizationContext` ni de filtre Doctrine actif dans `ImportArticlesHandler` — c'est un handler write-only avec FK explicite (`setOrganization()`), pas de SELECT à scoper. Les 2 entités utiles (org + author) sont fetchées par ID.
-- **Best-effort sur l'import** : items invalides loggés en `warning` et skippés, le batch continue. Mieux qu'un import all-or-nothing pour des fichiers de 10k items.
-- **Index `(organization_id, status)`** sur la table `article` pour accélérer les listings filtrés par statut au sein d'une org.
-
----
-
 ## Ce que ce projet démontre
 
-- Maîtrise de **Symfony 8** et **PHP 8.4** sur les nouveautés récentes (property hooks, enums enrichis, JsonStreamer, `#[AsCommand]` + `#[Option]`, `expose_security_errors` enum).
+- Maîtrise de **Symfony 8** et **PHP 8.4** sur les nouveautés récentes (property hooks, enums enrichis, JsonStreamer, **Lazy Objects natifs**, `#[AsCommand]` + `#[Option]`, `expose_security_errors` enum).
 - Conception d'**architectures multi-tenant sécurisées** : isolation au niveau SQL via Doctrine Filter, double-check par Voters, distinction 404 vs 403 réfléchie pour ne pas trahir l'existence d'une ressource cross-tenant.
 - Pratique du **streaming** sur les traitements de masse (import + export) avec mémoire constante, batch flush, gestion correcte du detach après `clear()`.
 - Distinction claire **Events synchrones (transaction)** vs **Messenger async (latence-tolérant)**, avec une règle d'équipe explicite sur le moment du `dispatch` (avant ou après `flush`).

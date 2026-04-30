@@ -21,3 +21,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # PHP 8.4 Lazy Object : instanciation différée à la première utilisation.
+    # Injecté dans SubscriptionController, mais seul l'endpoint /invoice le déclenche.
+    App\Service\InvoicePdfRenderer:
+        lazy: true
