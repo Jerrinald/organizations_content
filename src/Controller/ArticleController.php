@@ -70,13 +70,16 @@ final class ArticleController extends AbstractController
         ObjectMapperInterface $objectMapper,
         #[MapQueryParameter] int $page = 1,
         #[MapQueryParameter] int $limit = 20,
+        #[MapQueryParameter] ?ArticleStatus $status = null,
     ): JsonResponse {
         $this->denyAccessUnlessGranted(OrganizationVoter::VIEW, $context->current());
 
         $page = max(1, $page);
         $limit = min(100, max(1, $limit));
 
-        $articles = $articleRepository->findBy([], ['createdAt' => 'DESC'], $limit, ($page - 1) * $limit);
+        $criteria = $status !== null ? ['status' => $status] : [];
+
+        $articles = $articleRepository->findBy($criteria, ['createdAt' => 'DESC'], $limit, ($page - 1) * $limit);
 
         $views = array_map(
             fn (Article $a) => $objectMapper->map($a, ArticleView::class),

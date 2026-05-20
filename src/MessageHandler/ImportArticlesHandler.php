@@ -6,7 +6,9 @@ namespace App\MessageHandler;
 
 use App\Dto\Streaming\ImportedArticleInput;
 use App\Entity\Article;
+use App\Enum\ArticleImportStatus;
 use App\Message\ImportArticlesMessage;
+use App\Repository\ArticleImportRepository;
 use App\Repository\MemberRepository;
 use App\Repository\OrganizationRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,6 +26,7 @@ final readonly class ImportArticlesHandler
     public function __construct(
         private OrganizationRepository $organizationRepository,
         private MemberRepository $memberRepository,
+        private ArticleImportRepository $articleImportRepository,
         private EntityManagerInterface $em,
         private StreamReaderInterface $jsonStreamReader,
         private LoggerInterface $logger,
@@ -32,6 +35,11 @@ final readonly class ImportArticlesHandler
 
     public function __invoke(ImportArticlesMessage $message): void
     {
+        $import = $this->articleImportRepository->find($message->importId)
+            ?? throw new UnrecoverableMessageHandlingException(
+                sprintf('ArticleImport %s no longer exists.', $message->importId),
+            );
+
         $organization = $this->organizationRepository->find($message->organizationId)
             ?? throw new UnrecoverableMessageHandlingException(
                 sprintf('Organization %s no longer exists.', $message->organizationId),
@@ -42,8 +50,14 @@ final readonly class ImportArticlesHandler
                 sprintf('Author member %s no longer exists.', $message->authorMemberId),
             );
 
+        $import->status = ArticleImportStatus::Processing;
+        $this->em->flush();
+
         $stream = @fopen($message->filePath, 'r');
         if ($stream === false) {
+            $import->status = ArticleImportStatus::Failed;
+            $this->em->flush();
+
             throw new UnrecoverableMessageHandlingException(
                 sprintf('Cannot open import file: %s', $message->filePath),
             );
@@ -83,14 +97,30 @@ final readonly class ImportArticlesHandler
                 ++$imported;
 
                 if ($imported % self::BATCH_SIZE === 0) {
+                    $import->setImportedCount($imported);
+                    $import->setSkippedCount($skipped);
                     $this->em->flush();
-                    $this->em->clear();
-                    $organization = $this->organizationRepository->find($message->organizationId);
-                    $author = $this->memberRepository->find($message->authorMemberId);
                 }
             }
 
+            $import->setImportedCount($imported);
+            $import->setSkippedCount($skipped);
+            $import->status = ArticleImportStatus::Success;
             $this->em->flush();
+        } catch (\Throwable $e) {
+            $import->setImportedCount($imported);
+            $import->setSkippedCount($skipped);
+            $import->status = ArticleImportStatus::Failed;
+            try {
+                $this->em->flush();
+            } catch (\Throwable $flushError) {
+                $this->logger->error('Could not persist failed import status', [
+                    'importId' => (string) $message->importId,
+                    'error' => $flushError->getMessage(),
+                ]);
+            }
+
+            throw $e;
         } finally {
             if (\is_resource($stream)) {
                 fclose($stream);
